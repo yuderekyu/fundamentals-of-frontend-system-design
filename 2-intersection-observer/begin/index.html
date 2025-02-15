@@ -47,7 +47,34 @@
      * 4. Update fragment
      * 5. Append fragment to "list" container
      */
-    const observer = null;
+
+    // keep track of the paginated pointer.
+    let page = 0;
+    const observerCallback = (entries, observer) => {
+      entries.forEach(async (entry) => {
+        if (entry.isIntersecting) {
+          const data = await db.getPage(page);
+          page += 1;
+
+          // use DocumentFragment to create a new fragment.
+          // FYI: The <template /> html element creates a DocumentFragment.
+          const fragment = new DocumentFragment();
+
+          // Append each data entry into the fragment.
+          data.forEach((cardData) => {
+            const { title, body } = cardData;
+            const cardElement = createCardElement(title, body);
+            fragment.appendChild(cardElement);
+          });
+
+          // Append the fragment containing new cards to the list.
+          list.appendChild(fragment);
+        }
+      });
+    }
+
+    const observer = new IntersectionObserver(observerCallback);
+    observer.observe(observerElement);
 
 </script>
 </body>
