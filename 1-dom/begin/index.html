@@ -4,30 +4,44 @@
     <meta charset="UTF-8">
     <title>Frontend System Design Fundamentals</title>
     <link rel="stylesheet" href="./index.css">
+    <template id="card-fragment">
+      <article class="card">
+        <h3 class="card__title"></h3>
+        <div class="card__body">
+          <div class='card__body__image'></div>
+          <section class='card__body__content'>
+          </section>
+        </div>
+      </article>
+    </template>
 </head>
 <body>
-<main id="container"></main>
+  <main id="container">
+</main>
 </body>
 <script>
     const container = document.getElementById('container');
-    const html = `<article class="card">
-    <h3 class="card__title"></h3>
-    <div class="card__body">
-      <div class='card__body__image'></div>
-      <section class='card__body__content'>
-      </section>
-    </div>
-  </article>`;
+    const template = document.getElementById('card-fragment');
 
-    /**
-     * @param {string} title
-     * @param {string} body
-     *
-     * @return {HTMLElement
-     */
-    function createCardComponent(title, body) {
-        // @todo - Implement function
-    }
+ /**
+  * @param {string} title
+  * @param {string} body
+  *
+  * @return {HTMLElement
+  */
+   function createCardComponent(title, body) {
+     const card = template.content.cloneNode(true).firstElementChild; // deep clone article fragment (one level below template tag
+
+     /* Note: for performance, use querySelectorAll to get both elements in single operation. */
+     /* const [titleNode, bodyNode] = card.querySelectorAll('.card__title, .card__body'); */
+
+     const titleNode = card.querySelector('.card__title');
+     titleNode.textContent = title;
+     const bodyNode = card.querySelector('.card__body');
+     bodyNode.textContent = body;
+
+     return card;
+   }
 
     const component = createCardComponent(
         "Frontend System Design: Fundamentals",
