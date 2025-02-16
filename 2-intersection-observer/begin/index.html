@@ -60,7 +60,7 @@
           // FYI: The <template /> html element creates a DocumentFragment.
           const fragment = new DocumentFragment();
 
-          // Append each data entry into the fragment.
+          // Append each data entry into the fragment to minimize dynamic dom mutations.
           data.forEach((cardData) => {
             const { title, body } = cardData;
             const cardElement = createCardElement(title, body);
