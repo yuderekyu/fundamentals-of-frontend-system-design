@@ -44,6 +44,14 @@
         .box:nth-child(4) {
             background: rgba(0, 0, 255, 0.5);
         }
+        .circle {
+            border-radius: 100%;
+            border-width: 4px;
+        }
+       .unset-circle {
+           border-radius: unset;
+           border-width: unset;
+       }
     </style>
 </head>
 <body>
@@ -71,6 +79,36 @@
      * 4. If width and height is more than 150px = unset the properties above
      * 5. All 4 boxes should use same observer
      */
+  const resizeObserver = new ResizeObserver((entries, observer) => {
+    for (const entry of entries) {
+      const target = entry.target;
+      const borderBoxSize = entry.borderBoxSize[0];
+      /* for rtl: blockSize = height, inlineSize = width */
+      const { blockSize, inlineSize } = borderBoxSize;
+      console.log({ blockSize, inlineSize });
+      if (blockSize < 150 && inlineSize < 150) {
+        target.className = 'box circle';
+      }
+
+      else {
+        target.className = 'box unset-circle';
+      }
+
+      /*Alternative: use inline styles */
+      /* target.style.borderRadius = "100%";
+       * target.style.border = "4px"; */
+
+      /* target.style.borderRadius = "unset";
+       * target.style.border = "unset";
+       */
+    }
+  })
+
+  const elementsToObserve = document.querySelectorAll('.box');
+  elementsToObserve.forEach(element => {
+    /*todo: debounce for better performance, otherwise callback is fired everytime size changes.*/
+    resizeObserver.observe(element);
+  });
 </script>
 </body>
 </html>
